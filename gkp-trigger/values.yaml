@@ -1,0 +1,22 @@
+############################################################
+# values.yaml                                              #
+# true  = Gatekeeper constraint enabled                    #
+# false = Gatekeeper constraint not enabled                #
+############################################################
+constraint:
+  allowprivilegeescalation: true      # Restricting escalation to root privileges         # PSP: allowPrivilegeEscalation, defaultAllowPrivilegeEscalation
+  hostfilesystem: true                # Usage of the host filesystem                      # PSP: allowedHostPaths
+  seccomp: false                      # The seccomp profile used by containers            # PSP: annotations
+  apparmor: false                     # The AppArmor profile used by containers           # PSP: annotations
+  hostnamespaces: true                # Usage of host namespaces                          # PSP: hostPID, hostIPC
+  selinux: false                      # The SELinux context of the container              # PSP: seLinux
+  capabilities: true                  # Linux capabilities                                # PSP: defaultAddCapabilities, requiredDropCapabilities, allowedCapabilities
+  hostnetworkports: true              # Usage of host networking and ports                # PSP: hostNetwork, hostPorts
+  users: true                         # The user and group IDs of the container           # PSP: runAsUser, runAsGroup, supplementalGroups, fsgroup
+  flexvolumedrivers: false            # White list of Flexvolume drivers                  # PSP: allowedFlexVolumes
+  privilegedcontainers: true          # Running of privileged containers                  # PSP: privileged
+  volumes: true                       # Usage of volume types                             # PSP: volumes
+  forbiddensysctls: false             # The sysctl profile used by containers             # PSP: forbiddenSysctls, allowedUnsafeSysctls
+  procmount: false                    # The Allowed Proc Mount types for the container    # PSP: allowedProcMountTypes
+  fsgroup: false                      # Forbid adding the root group                      # PSP: RunAsAny
+  readonlyrootfilesystem: true        # Requiring the use of a read only root file system # PSP: readOnlyRootFilesystem

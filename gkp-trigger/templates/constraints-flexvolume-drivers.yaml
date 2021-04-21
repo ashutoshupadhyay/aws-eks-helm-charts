@@ -1,0 +1,16 @@
+{{- if .Values.constraint.flexvolumedrivers }}
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sPSPFlexVolumes
+metadata:
+  name: psp-flexvolume-drivers
+spec:
+  match:
+    kinds:
+      - apiGroups: [""]
+        kinds: ["Pod"]
+    excludedNamespaces: ["kube-system", "amazon-cloudwatch", "ngress-nginx"] #ashutosh -- updated
+  parameters:
+    allowedFlexVolumes: #[]
+    - driver: "example/lvm"
+    - driver: "example/cifs"
+{{- end }}

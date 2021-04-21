@@ -1,0 +1,87 @@
+replicas: 3
+auditInterval: 60
+constraintViolationsLimit: 20
+auditFromCache: false
+createNamespace: true
+disableValidatingWebhook: false
+validatingWebhookTimeoutSeconds: 3
+enableDeleteOperations: false
+auditChunkSize: 0
+logLevel: INFO
+logDenies: false
+emitAdmissionEvents: false
+emitAuditEvents: false
+image:
+  repository: openpolicyagent/gatekeeper
+  release: v3.4.0-rc.1
+  pullPolicy: Always
+  pullSecrets: []
+podAnnotations:
+  { container.seccomp.security.alpha.kubernetes.io/manager: runtime/default }
+podLabels: {}
+secretAnnotations: {}
+controllerManager:
+  hostNetwork: false
+  priorityClassName: system-cluster-critical
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+                - key: gatekeeper.sh/operation
+                  operator: In
+                  values:
+                    - webhook
+            topologyKey: kubernetes.io/hostname
+          weight: 100
+  tolerations: []
+  nodeSelector: { kubernetes.io/os: linux }
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 256Mi
+audit:
+  hostNetwork: false
+  priorityClassName: system-cluster-critical
+  affinity: {}
+  tolerations: []
+  nodeSelector: { kubernetes.io/os: linux }
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 256Mi
+customResourceDefinitions:
+  create: true
+pdb:
+  controllerManager:
+    minAvailable: 1
+
+############################################################
+# values.yaml                                              #
+# true  = Gatekeeper constraint enabled                    #
+# false = Gatekeeper constraint not enabled                #
+############################################################
+template:
+  allowprivilegeescalation: true      # Restricting escalation to root privileges         # PSP: allowPrivilegeEscalation, defaultAllowPrivilegeEscalation
+  hostfilesystem: true                # Usage of the host filesystem                      # PSP: allowedHostPaths
+  seccomp: false                      # The seccomp profile used by containers            # PSP: annotations
+  apparmor: false                     # The AppArmor profile used by containers           # PSP: annotations
+  hostnamespaces: true                # Usage of host namespaces                          # PSP: hostPID, hostIPC
+  selinux: false                      # The SELinux context of the container              # PSP: seLinux
+  capabilities: true                  # Linux capabilities                                # PSP: defaultAddCapabilities, requiredDropCapabilities, allowedCapabilities
+  hostnetworkports: true              # Usage of host networking and ports                # PSP: hostNetwork, hostPorts
+  users: true                         # The user and group IDs of the container           # PSP: runAsUser, runAsGroup, supplementalGroups, fsgroup
+  flexvolumedrivers: false            # White list of Flexvolume drivers                  # PSP: allowedFlexVolumes
+  privilegedcontainers: true          # Running of privileged containers                  # PSP: privileged
+  volumes: true                       # Usage of volume types                             # PSP: volumes
+  forbiddensysctls: false             # The sysctl profile used by containers             # PSP: forbiddenSysctls, allowedUnsafeSysctls
+  procmount: false                    # The Allowed Proc Mount types for the container    # PSP: allowedProcMountTypes
+  fsgroup: false                      # Forbid adding the root group                      # PSP: RunAsAny
+  readonlyrootfilesystem: true        # Requiring the use of a read only root file system # PSP: readOnlyRootFilesystem

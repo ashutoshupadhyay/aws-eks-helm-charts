@@ -1,0 +1,15 @@
+{{- if .Values.constraint.apparmor }}
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sPSPAppArmor
+metadata:
+  name: psp-apparmor
+spec:
+  match:
+    kinds:
+      - apiGroups: [""]
+        kinds: ["Pod"]
+    excludedNamespaces: ["kube-system", "amazon-cloudwatch", "ngress-nginx"] #ashutosh -- updated
+  parameters:
+    allowedProfiles:
+    - runtime/default
+{{- end }}

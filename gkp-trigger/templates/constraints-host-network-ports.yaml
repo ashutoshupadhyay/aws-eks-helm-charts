@@ -1,0 +1,16 @@
+{{- if .Values.constraint.hostnetworkports }}
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sPSPHostNetworkingPorts
+metadata:
+  name: psp-host-network-ports
+spec:
+  match:
+    kinds:
+      - apiGroups: [""]
+        kinds: ["Pod"]
+    excludedNamespaces: ["kube-system", "amazon-cloudwatch", "ngress-nginx"] #ashutosh -- updated
+  parameters:
+    hostNetwork: true
+    min: 80
+    max: 9000
+{{- end }}
