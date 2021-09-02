@@ -1,0 +1,9 @@
+namespace: default
+image: 
+  repository: aquasec/kube-bench
+  release: latest
+benchmark: eks-1.0
+logRetention:
+  daily: 7
+  hourly: 23
+EksGatekeeper: ignore
